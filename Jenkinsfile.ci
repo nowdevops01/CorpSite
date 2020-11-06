@@ -7,6 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                //snDevOpsStep()
                 sh '''
                     export M2_HOME=/opt/apache-maven-3.6.0 # your Mavan home path
                     export PATH=$PATH:$M2_HOME/bin
@@ -17,11 +18,12 @@ pipeline {
         }
 
         stage('Test') {
-            environment {
+            /*environment {
               TOMCAT = credentials('tomcat_user')
-            }
+            }*/
         
             steps {
+                //snDevOpsStep()
                 sh '''
                     export M2_HOME=/opt/apache-maven-3.6.0 # your Mavan home path
                     export PATH=$PATH:$M2_HOME/bin
@@ -39,14 +41,16 @@ pipeline {
         }
 
         stage('Publish') {
-            environment {
+            /*environment {
               TOMCAT = credentials('tomcat_user')
-            }
+            }*/
             
             steps {
                 sh 'echo publish stage'
                 archiveArtifacts artifacts: 'target/**/*.war', fingerprint: true
+                //snDevOpsStep()
                 //snDevOpsArtifact(artifactsPayload:"""{"artifacts": [{"name": "globex-web.war","version":"2.${env.BUILD_NUMBER}.0","semanticVersion": "2.${env.BUILD_NUMBER}.0","repositoryName": "Repo1"}]}""")
+                //sh 'curl -u $TOMCAT_USR:$TOMCAT_PSW --location --request PUT \'http://tomcat:8080/manager/text/deploy?path=/globex&war=globex-web.war&update=true\' --header \'Content-Type: application/java-archive\' --data-binary \'@target/globex-web.war\''
             }
         }
     }
